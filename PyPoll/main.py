@@ -14,36 +14,98 @@ with open(csvpath, newline='') as csvfile:
     # Read the header row first (skip this part if there is no header)
     csv_header = next(csvfile)
 
-# intilize a null list 
-    unique_list = [] 
-
-    # traverse for all elements 
-    for row in csvreader:
-        candidate = str(row[2])
-    # check if exists in unique_list or not 
-        if candidate not in unique_list: 
-            unique_list.append(candidate) 
+# Define Initial Variables (not sure on how to define strings for the months)
+    total_votes = 0
+    vote_count = 0
+    Khan = 0
+    Correy = 0
+    Li = 0
+    Tooley = 0
+    Winner = "NA"
     
 
+# Initiate loop 
+    for row in csvreader:  
 
+# A: Intilize a null list to identify unique candidates 
+        candidate_list = [] 
+        candidate = str(row[2])
 
-# Total vote count 
-    #row_count = sum(1 for row in csvreader)
-row_count = len(row[0])
+    # traverse for all elements, check if exists in unique_list or not and append if not 
+        if candidate not in candidate_list: 
+            candidate_list.append(candidate) 
+    
+# B: Calculate Votes and determine winner
+   
+        if str(row[2]) == str("Khan"):
+            total_votes = total_votes + 1
+            Khan = Khan + 1
+            if Khan >= max(Khan, Correy, Li, Tooley): 
+               Winner = "Khan"   
 
-# function to get unique values of candidate names 
+        if str(row[2]) == str("Correy"):
+            total_votes = total_votes + 1
+            Correy = Correy + 1
+            if Correy >= max(Khan, Correy, Li, Tooley): 
+               Winner = "Correy"   
 
-      
+        if str(row[2]) == str("Li"):
+            total_votes = total_votes + 1
+            Li = Li + 1
+            if Li >= max(Khan, Correy, Li, Tooley): 
+               Winner = "Li"   
 
-
- 
-#output  
-print ("")
+        if str(row[2]) == str("O'Tooley"):
+            total_votes = total_votes + 1
+            Tooley = Tooley + 1
+            if Tooley >= max(Khan, Correy, Li, Tooley): 
+               Winner = "O'Tooley"   
+        
+# B: Calculate Percentages  
+    Khan_cent = int((Khan / total_votes) * 100)
+    Correy_cent = int((Correy / total_votes) * 100)
+    Li_cent = int((Li / total_votes) * 100)
+    Tooley_cent= int((Tooley / total_votes) * 100)
+    
+# C: Output to Terminal   
+print ("--------------------------------------")
 print ("Election Results")
-print ("________________________")
-print(f"Total Votes: {row_count}")
-print ("________________________")
-print(unique_list)
-print ("________________________")
-print(len(unique_list))
-print(f"Header: {csv_header}")
+print ("--------------------------------------")
+print(f"Total Votes: {total_votes}")
+print ("--------------------------------------")
+print(f"Khan: {Khan_cent}{'%'} ({Khan})")
+print(f"Correy: {Correy_cent}{'%'} ({Correy})")
+print(f"Li: {Li_cent}{'%'} ({Li})")
+print(f"Tooley: {Tooley_cent}{'%'} ({Tooley})")
+print ("--------------------------------------")
+print(f"Winner: {Winner}")
+print ("--------------------------------------")
+
+
+# D: Write the results to an output TXT file   
+txt_file = open("pypoll_results.txt","w")    
+
+dotted_line = str("___________ \n") 
+txt_file.writelines(dotted_line)
+txt_file.write("Election Results \n")
+txt_file.writelines(dotted_line)
+
+L = [f"Total Votes: {total_votes}","\n"] 
+txt_file.writelines(L)
+txt_file.writelines(dotted_line)
+
+M = [f"Khan: {Khan_cent}{'%'} ({Khan})","\n"]
+txt_file.writelines(M)
+N = [f"Correy: {Correy_cent}{'%'} ({Correy})","\n"]
+txt_file.writelines(N)
+O = [f"Li: {Li_cent}{'%'} ({Li})","\n"]
+txt_file.writelines(O)
+P = [f"Tooley: {Tooley_cent}{'%'} ({Tooley})","\n"]
+txt_file.writelines(P)
+
+txt_file.writelines(dotted_line)
+W = [f"Winner: {Winner}","\n"]
+txt_file.writelines(W)
+txt_file.writelines(dotted_line)
+
+txt_file.close()
